@@ -12,11 +12,10 @@ app.use(express.json());
 app.use(cors());
 
 app.get("/", (req, res) => {
-    console.info("Bem-vindo a API de Pets!");
 
     res.status(200).json({
         ok: true,
-        messagem: "Rota execultada com sucesso!"
+        message: "Welcome to the pets API!"
     });
 });
 
@@ -105,10 +104,10 @@ app.put("/pets/:id", [validateFields, validateId], (req, res) => {
             });
         };
 
-        pet.name = name;
-        pet.race = race;
-        pet.age = age;
-        pet.tutorsName = tutorsName;
+        pet.name = name.trim();
+        pet.race = race.trim();
+        pet.age = age.trim();
+        pet.tutorsName = tutorsName.trim();
 
         return res.status(200).json({
             ok: true,
@@ -124,7 +123,36 @@ app.put("/pets/:id", [validateFields, validateId], (req, res) => {
     };
 });
 
+app.delete("/pets/:id", [validateId], (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const acharId = pets.findIndex(i => { return i.id === id });
+
+        if (acharId === -1) {
+            return res.status(404).json({
+                ok: false,
+                message: "ID not found!"
+            });
+        };
+
+        const petDelete = pets.splice(acharId, 1);
+
+        return res.status(200).json({
+            ok: true,
+            message: "Pet successfully deleted!",
+            data: petDelete
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            ok: false,
+            message: error.toString()
+        });
+    }
+});
+
 const port = process.env.PORT;
 app.listen(port, () => {
-    console.info(`O servidor está execultando na porta: ${port}!`);
+    console.info(`The server is running on port: ${port}!`);
 });

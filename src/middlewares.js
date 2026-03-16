@@ -8,9 +8,9 @@ export const validateFields = (req, res, next) => {
         if (!age) errors.push({ ok: false, message: "The age field is required!" });
         if (!tutorsName) errors.push({ ok: false, message: "The tutor's name field is required!" });
 
-        if (name === "") errors.push({ ok: false, message: "The name field cannot be empty!" });
-        if (race === "") errors.push({ ok: false, message: "The field can't be left empty!" });
-        if (age === "") errors.push({ ok: false, message: "The age field cannot be left blank!" });
+        if (name === "" || name === "  ") errors.push({ ok: false, message: "The name field cannot be empty!" });
+        if (race === "" || race === "  ") errors.push({ ok: false, message: "The field can't be left empty!" });
+        if (age === "" || age === "  ") errors.push({ ok: false, message: "The age field cannot be left blank!" });
         if (tutorsName === "") errors.push({ ok: false, message: "The tutor's name field cannot be empty!" });
 
         if (typeof name !== "string") errors.push({ ok: false, message: "The name field must be of type string!" });
@@ -37,18 +37,19 @@ export const validateFields = (req, res, next) => {
 
 export const validateId = (req, res, next) => {
     try {
-        const { id } = req.params;
-        const errors = [];
+        const { id } = req.params.id;
 
-        if (!id) errors.push({ ok: false, message: "It is mandatory to provide the ID!" });
-
-        if (id === "") errors.push({ ok: false, message: "It is mandatory to provide the ID! ta caindo aqui!" });
-
-        if (errors.length > 0) {
+        if (!id) {
             return res.status(400).json({
                 ok: false,
-                message: "invalid request",
-                reason: errors
+                message: "It is mandatory to provide the ID!"
+            });
+        };
+
+        if (id === "") {
+            return res.status(400).json({
+                ok: false,
+                message: "It is mandatory to provide the ID! ta caindo aqui!"
             });
         };
 
