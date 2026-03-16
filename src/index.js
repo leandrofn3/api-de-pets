@@ -3,7 +3,7 @@ import * as dotenv from "dotenv";
 import { pets } from "./data.js";
 import { randomUUID } from "crypto";
 import cors from "cors";
-import { validateFields } from "./middlewares.js";
+import { validateFields, validateId } from "./middlewares.js";
 
 dotenv.config();
 
@@ -62,6 +62,33 @@ app.get("/pets", (req, res) => {
             message: error.toString()
         });
     };
+});
+
+app.get("/pets/:id", (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const pet = pets.find(i => { return i.id === id });
+
+        if(!pet){
+        return res.status(404).json({
+            ok: false,
+            message: "pet not found!"
+        });        
+        }
+
+        return res.status(200).json({
+            ok: true,
+            message: "Pet successfully found!",
+            data: pet
+        });
+        
+    } catch (error) {
+        res.status(500).json({
+            ok: false,
+            message: error.toString()
+        });
+    }
 });
 
 const port = process.env.PORT;

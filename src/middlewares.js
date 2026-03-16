@@ -34,3 +34,24 @@ export const validateFields = (req, res, next) => {
         });
     }
 };
+
+export const validateId = (req, res, next) => {
+    try {
+        const { id } = req.params;
+
+        if(!id){
+            return res.status(400).json({
+                ok: false,
+                message: "It is mandatory to pass the ID as a parameter!"
+            });
+        }
+
+        return next();
+        
+    } catch (error) {
+        return res.staus(500).json({
+            ok: false,
+            message: error.toString()
+        });
+    };
+};
