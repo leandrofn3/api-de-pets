@@ -11,7 +11,7 @@ export const validateFields = (req, res, next) => {
         if (name === "" || name === "  ") errors.push({ ok: false, message: "The name field cannot be empty!" });
         if (race === "" || race === "  ") errors.push({ ok: false, message: "The field can't be left empty!" });
         if (age === "" || age === "  ") errors.push({ ok: false, message: "The age field cannot be left blank!" });
-        if (tutorsName === "") errors.push({ ok: false, message: "The tutor's name field cannot be empty!" });
+        if (tutorsName === "" || tutorsName === "  ") errors.push({ ok: false, message: "The tutor's name field cannot be empty!" });
 
         if (typeof name !== "string") errors.push({ ok: false, message: "The name field must be of type string!" });
         if (typeof race !== "string") errors.push({ ok: false, message: "The race field must be of type string!" });
