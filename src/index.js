@@ -28,7 +28,7 @@ app.post("/pets", [validateFields], (req, res) => {
             id: randomUUID(),
             name: name.trim(),
             race: race.trim(),
-            age: Number(age),
+            age: age,
             tutorsName: tutorsName.trim()
         };
 
@@ -42,6 +42,22 @@ app.post("/pets", [validateFields], (req, res) => {
 
     } catch (error) {
         return res.send(500).json({
+            ok: false,
+            message: error.toString()
+        });
+    };
+});
+
+app.get("/pets", (req, res) => {
+    try {
+        return res.status(200).json({
+            ok: true,
+            message: "Pets successfully listed!",
+            data: pets
+        });
+
+    } catch (error) {
+        res.status(500).json({
             ok: false,
             message: error.toString()
         });

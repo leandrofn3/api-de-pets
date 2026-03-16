@@ -1,3 +1,1 @@
-export const pets = [{
-
-}];
+export const pets = [];
