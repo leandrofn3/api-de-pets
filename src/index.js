@@ -14,7 +14,7 @@ app.use(cors());
 app.get("/", (req, res) => {
     console.info("Bem-vindo a API de Pets!");
 
-    res.status(200).send({
+    res.status(200).json({
         ok: true,
         messagem: "Rota execultada com sucesso!"
     });
@@ -41,7 +41,7 @@ app.post("/pets", [validateFields], (req, res) => {
         });
 
     } catch (error) {
-        return res.send(500).json({
+        return res.status(500).json({
             ok: false,
             message: error.toString()
         });
@@ -70,11 +70,11 @@ app.get("/pets/:id", (req, res) => {
 
         const pet = pets.find(i => { return i.id === id });
 
-        if(!pet){
-        return res.status(404).json({
-            ok: false,
-            message: "pet not found!"
-        });        
+        if (!pet) {
+            return res.status(404).json({
+                ok: false,
+                message: "pet not found!"
+            });
         }
 
         return res.status(200).json({
@@ -82,13 +82,46 @@ app.get("/pets/:id", (req, res) => {
             message: "Pet successfully found!",
             data: pet
         });
-        
+
     } catch (error) {
         res.status(500).json({
             ok: false,
             message: error.toString()
         });
     }
+});
+
+app.put("/pets/:id", [validateFields, validateId], (req, res) => {
+    try {
+        const { id } = req.params;
+        const { name, race, age, tutorsName } = req.body;
+
+        const pet = pets.find(i => { return i.id === id });
+
+        if (!pet) {
+            return res.status(404).json({
+                ok: false,
+                message: "pet not found!"
+            });
+        };
+
+        pet.name = name;
+        pet.race = race;
+        pet.age = age;
+        pet.tutorsName = tutorsName;
+
+        return res.status(200).json({
+            ok: true,
+            message: "Pet updated successfully!",
+            data: pet
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            ok: false,
+            message: error.toString()
+        });
+    };
 });
 
 const port = process.env.PORT;
